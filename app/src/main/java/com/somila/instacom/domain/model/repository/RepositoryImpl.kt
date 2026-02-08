@@ -1,6 +1,6 @@
 package com.somila.instacom.domain.model.repository
 
-import com.somila.instacom.network.ApiService
+import com.somila.instacom.domain.model.network.ApiService
 import com.somila.instacom.domain.model.Post
 
 class RepositoryImpl(private val api: ApiService) : Repository {
@@ -11,7 +11,7 @@ class RepositoryImpl(private val api: ApiService) : Repository {
             if (response.isSuccessful) {
                 val posts = response.body()
                 if (posts != null) {
-                    Result.success(posts)
+                    Result.success(posts.posts)
                 } else {
                     Result.failure(Exception("Empty response"))
                 }
