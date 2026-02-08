@@ -1,6 +1,11 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -20,6 +25,10 @@ android {
     }
 
     buildTypes {
+
+//        debug {
+//            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+//        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -28,10 +37,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         compose = true
     }
@@ -53,4 +64,23 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+
+    androidTestImplementation( libs.hilt.android.testing)
+
+    testImplementation (libs.hilt.android.testing)
+    kspTest (libs.hilt.compiler)
+
+    implementation (libs.play.services.location)
+    implementation (libs.logging.interceptor)
+
+    implementation (libs.retrofit)
+    implementation (libs.retrofit2.kotlin.coroutines.adapter)
+    implementation (libs.converter.name)
+    implementation (libs.gson)
 }
