@@ -3,7 +3,6 @@ import org.gradle.kotlin.dsl.implementation
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
 }
@@ -66,15 +65,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.hilt.navigation.compose)
 
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.android)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
-    androidTestImplementation( libs.hilt.android.testing)
-
-    testImplementation (libs.hilt.android.testing)
-    kspTest (libs.hilt.compiler)
+    implementation(libs.androidx.navigation.compose)
 
     implementation (libs.play.services.location)
     implementation (libs.logging.interceptor)
