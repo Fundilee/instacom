@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.somila.instacom.ui.theme.details.PostDetailScreen
-import com.somila.instacom.ui.theme.landingscreen.PostListScreen
+import com.somila.details.PostDetailScreen
+import com.somila.landing.PostListScreen
 
 @Composable
 fun MainNavGraph(navController: NavHostController, innerPadding: PaddingValues) {
