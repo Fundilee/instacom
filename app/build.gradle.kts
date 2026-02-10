@@ -78,4 +78,10 @@ dependencies {
     implementation (libs.retrofit2.kotlin.coroutines.adapter)
     implementation (libs.converter.name)
     implementation (libs.gson)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.turbine)
 }
