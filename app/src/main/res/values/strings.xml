@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">InstaCom</string>
+    <string name="available_posts">Available Posts</string>
+    <string name="search_post">Search post</string>
+    <string name="no_post_found">No post found</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="submit">Submit</string>
+    <string name="delete">Delete</string>
+    <string name="add_new_post">Add new post</string>
+    <string name="post_details">Post Details</string>
 </resources>

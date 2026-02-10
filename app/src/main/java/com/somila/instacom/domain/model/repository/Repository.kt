@@ -5,11 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
+    suspend fun getPost(id: Int): Result<Post>
     suspend fun getPosts() : Result<List<Post>>
-
     suspend fun createPost(postRequest: Post): Result<Post>
-
     suspend fun updatePost(id: Int, postRequest: Post) : Result<Post>
-
     suspend fun deletePost(id: Int) : Result<Unit>
 }
