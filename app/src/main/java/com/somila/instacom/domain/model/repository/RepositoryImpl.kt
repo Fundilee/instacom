@@ -23,6 +23,24 @@ class RepositoryImpl(private val api: ApiService) : Repository {
         }
     }
 
+ override suspend fun getPost(id: Int): Result<Post> {
+        return try {
+            val response = api.getPost(id)
+            if (response.isSuccessful) {
+                val post = response.body()
+                if (post != null) {
+                    Result.success(post)
+                } else {
+                    Result.failure(Exception("Empty response"))
+                }
+            } else {
+                Result.failure(Exception("Error: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun createPost(postRequest: Post): Result<Post> {
         return try {
             val response = api.createPost(postRequest)
