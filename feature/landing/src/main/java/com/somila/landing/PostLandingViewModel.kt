@@ -17,20 +17,34 @@ class PostLandingViewModel(
     private val _state = MutableStateFlow(PostLandingContract.UiState())
     val state: StateFlow<PostLandingContract.UiState> = _state.asStateFlow()
 
+
     init {
+        observePosts()
         loadPostList()
+    }
+
+    private fun observePosts() {
+        viewModelScope.launch {
+            repository.observePosts().collect { resultList ->
+                _state.update {
+                    it.copy(
+                        postList = resultList,
+                    )
+                }
+            }
+        }
     }
 
     private fun loadPostList() {
         viewModelScope.launch {
             _state.update { it.copy(loading = true, error = "", isSuccess = false) }
             repository.getPosts()
-                .onSuccess { responseList ->
+                .onSuccess {
                     _state.update {
                         it.copy(
-                            postList = responseList,
                             loading = false,
-                            isSuccess = true
+                            isSuccess = true,
+                            error = ""
                         )
                     }
                 }
@@ -58,6 +72,11 @@ class PostLandingViewModel(
 
             is PostLandingContract.UserEvent.OnAddPost -> {
                 addPost(event.postRequest)
+            }
+
+            is PostLandingContract.UserEvent.OnClear -> {
+                _state.update { it.copy(shouldDisplayBottomSheet = false) }
+
             }
         }
     }

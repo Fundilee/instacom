@@ -60,6 +60,14 @@ class PostDetailsViewModel(
                 updatePost(event.postRequest)
 
             }
+
+            is PostDetailsContract.UserEvent.OnEditClicked -> {
+                _state.update {
+                    it.copy(
+                        editEnabled = !it.editEnabled,
+                    )
+                }
+            }
         }
     }
 

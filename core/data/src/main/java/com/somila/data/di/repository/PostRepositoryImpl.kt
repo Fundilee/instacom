@@ -4,23 +4,33 @@ import com.somila.data.di.mapper.PostMapper
 import com.somila.domain.model.Post
 import com.somila.domain.repository.PostRepository
 import com.somila.network.di.retrofit.ApiService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class PostRepositoryImpl(private val api: ApiService) : PostRepository {
 
-    override suspend fun getPosts(): Result<List<Post>> {
+    private val _posts = MutableStateFlow<List<Post>>(emptyList())
+
+    override fun observePosts(): StateFlow<List<Post>> = _posts
+
+    override suspend fun getPosts(): Result<Unit> {
         return try {
             val response = api.getPosts()
             if (response.isSuccessful) {
-                val posts = response.body()
-                if (posts != null) {
-                    val postList = PostMapper.mapToDomainList(posts)
-                    Result.success(postList)
+                val body = response.body()
+                if (body != null) {
+                    val posts = body.map { PostMapper.mapToDomain(it) }
+                    _posts.value = posts
+                    Result.success(Unit)
                 } else {
                     Result.failure(Exception("Empty response"))
                 }
             } else {
-                Result.failure(Exception("Error: ${response.code()}"))
+
+                Result.failure(handleApiErrorCode(response.code()))
             }
+
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -38,7 +48,7 @@ class PostRepositoryImpl(private val api: ApiService) : PostRepository {
                     Result.failure(Exception("Empty response"))
                 }
             } else {
-                Result.failure(Exception("Error: ${response.code()}"))
+                Result.failure(handleApiErrorCode(response.code()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -52,12 +62,13 @@ class PostRepositoryImpl(private val api: ApiService) : PostRepository {
                 val post = response.body()
                 if (post != null) {
                     val post = PostMapper.mapToDomain(post)
+                    _posts.update { list -> list + post }
                     Result.success(post)
                 } else {
                     Result.failure(Exception("Empty response"))
                 }
             } else {
-                Result.failure(Exception("Error: ${response.code()}"))
+                Result.failure(handleApiErrorCode(response.code()))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -66,18 +77,26 @@ class PostRepositoryImpl(private val api: ApiService) : PostRepository {
 
     override suspend fun updatePost(id: Int, postRequest: Post): Result<Post> {
         return try {
-            val response = api.updatePost(id = id, post = postRequest)
+            val response = api.updatePost(id, postRequest)
+
             if (response.isSuccessful) {
-                val post = response.body()
-                if (post != null) {
-                    val post = PostMapper.mapToDomain(post)
-                    Result.success(post)
+                val body = response.body()
+
+                if (body != null) {
+                    val updatedPost = PostMapper.mapToDomain(body)
+                    _posts.update { list -> list.map {
+                            if (it.id == updatedPost.id) updatedPost else it
+                        }
+                    }
+                    Result.success(updatedPost)
                 } else {
                     Result.failure(Exception("Empty response"))
                 }
+
             } else {
-                Result.failure(Exception("Error: ${response.code()}"))
+                Result.failure(Exception("Error ${response.code()}"))
             }
+
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -87,17 +106,27 @@ class PostRepositoryImpl(private val api: ApiService) : PostRepository {
         return try {
             val response = api.deletePost(id = id)
             if (response.isSuccessful) {
-                val post = response.body()
-                if (post != null) {
-                    Result.success(post)
-                } else {
-                    Result.failure(Exception("Empty response"))
-                }
+                //Remove the post from cache
+                _posts.update { list -> list.filterNot { it.id == id } }
+                Result.success(Unit)
             } else {
-                Result.failure(Exception("Error: ${response.code()}"))
+                Result.failure(handleApiErrorCode(response.code()))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    private fun handleApiErrorCode(code: Int): Exception {
+        val exception = if (code == 404) {
+            Exception("Requested data not found")
+        } else if (code == 429) {
+            Exception("Too many requests. Please try again later.")
+        } else if (code >= 500) {
+            Exception("Server error occurred. Please try again later.")
+        } else {
+            Exception("Request failed with code")
+        }
+        return exception
     }
 }
