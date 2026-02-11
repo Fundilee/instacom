@@ -23,7 +23,7 @@ val networkModule = module {
 
     single<Retrofit> {
         Retrofit.Builder()
-            .baseUrl("https://dummyjson.com/")
+            .baseUrl("https://698affcf6c6f9ebe57bb4ab0.mockapi.io/insta/assessment/")
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

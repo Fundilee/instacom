@@ -6,7 +6,6 @@ import com.somila.network.di.dto.PostDto
 object PostMapper {
     fun mapToDomain(dto: PostDto): Post {
         return Post(
-            userId = dto.userId,
             id = dto.id,
             title = dto.title,
             body = dto.body,

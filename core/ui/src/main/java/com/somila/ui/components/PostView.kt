@@ -93,7 +93,6 @@ fun PostView(
                             id = Random.nextInt(),
                             title = title,
                             body = body,
-                            userId = 14,
                             createdAt = System.currentTimeMillis().toString(),
                             updatedAt = System.currentTimeMillis().toString()
                         )

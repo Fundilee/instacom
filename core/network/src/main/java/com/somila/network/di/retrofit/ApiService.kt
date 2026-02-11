@@ -12,13 +12,13 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("posts")
+    @GET("post")
     suspend fun getPosts(): Response<List<PostDto>>
 
     @GET("post/{id}")
     suspend fun getPost(@Path("id") id: Int): Response<PostDto>
 
-    @POST("/post")
+    @POST("post")
     suspend fun createPost(@Body post: Post): Response<PostDto>
 
     @PUT("post/{id}")

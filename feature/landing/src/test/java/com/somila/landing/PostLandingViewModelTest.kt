@@ -49,7 +49,6 @@ class HomeScreenViewModelTest {
                 id = 1,
                 title = "pikachu",
                 body = "The news are as follows",
-                userId = 12,
                 createdAt = "120.0",
                 updatedAt = "120.0"
             ),
@@ -57,7 +56,6 @@ class HomeScreenViewModelTest {
                 id = 2,
                 title = "charizard",
                 body = "Please ensure post is not null",
-                userId = 12,
                 createdAt = "120.0",
                 updatedAt = "120.0"
             )
