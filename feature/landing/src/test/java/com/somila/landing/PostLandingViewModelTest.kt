@@ -4,9 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.somila.domain.model.Post
 import com.somila.domain.repository.PostRepository
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -42,7 +44,7 @@ class HomeScreenViewModelTest {
     }
 
     @Test
-    fun `init should load posts list successfully`() = runTest(testDispatcher) {
+    fun `init should load posts list successfully`() = runTest {
         // Given
         val postList = listOf(
             Post(
@@ -61,34 +63,39 @@ class HomeScreenViewModelTest {
             )
         )
 
-        // When
-        coEvery { mockRepository.getPosts() } returns Result.success(postList)
+        val postsFlow = MutableStateFlow(postList)
+        every { mockRepository.observePosts() } returns postsFlow
+
+        coEvery { mockRepository.getPosts() } returns Result.success(Unit)
+
         val viewModel = PostLandingViewModel(mockRepository)
         advanceUntilIdle()
 
         // Then
-        val currentState = viewModel.state.value
-        assertFalse(currentState.loading)
-        assertTrue(currentState.isSuccess)
-        assertEquals("", currentState.error)
-        assertEquals(postList, currentState.postList)
+        val state = viewModel.state.value
+        assertFalse(state.loading)
+        assertTrue(state.error.isEmpty())
+        assertEquals(postList, state.postList)
     }
 
     @Test
-    fun `init should load posts list unsuccessfully`() = runTest(testDispatcher) {
+    fun `init should load posts list unsuccessfully`() = runTest {
         // Given
         val errorMessage = "Error occurred"
 
-        // When
+        val postsFlow = MutableStateFlow<List<Post>>(emptyList())
+        every { mockRepository.observePosts() } returns postsFlow
+
         coEvery { mockRepository.getPosts() } returns Result.failure(Exception(errorMessage))
+
+        // When
         val viewModel = PostLandingViewModel(mockRepository)
         advanceUntilIdle()
 
         // Then
-        val currentState = viewModel.state.value
-        assertFalse(currentState.loading)
-        assertFalse(currentState.isSuccess)
-        assertEquals(currentState.error, errorMessage)
+        val state = viewModel.state.value
+        assertFalse(state.loading)
+        assertEquals(errorMessage, state.error)
+        assertTrue(state.postList.isEmpty())
     }
-
 }
