@@ -8,5 +8,5 @@ sealed class Destination {
     data object LandingScreen
     
     @Serializable
-    data class PostDetailScreen(val pokemonId: Int)
+    data class PostDetailScreen(val id: Int)
 }

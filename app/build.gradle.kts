@@ -48,6 +48,13 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:network"))
+    implementation(project(":feature:landing"))
+    implementation(project(":feature:details"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,26 +63,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
 
     implementation(libs.androidx.navigation.compose)
 
-    implementation (libs.play.services.location)
-    implementation (libs.logging.interceptor)
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
-    implementation (libs.retrofit)
-    implementation (libs.retrofit2.kotlin.coroutines.adapter)
-    implementation (libs.converter.name)
-    implementation (libs.gson)
+    // Dependency Injection
+    implementation(libs.koin.android)
+    implementation(libs.androidx.navigation.runtime.ktx)
 }

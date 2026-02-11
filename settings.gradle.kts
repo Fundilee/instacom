@@ -21,4 +21,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "InstaCom"
 include(":app")
- 
+include(":core")
+include(":core:data")
+include(":core:network")
+include(":core:domain")
+include(":core:ui")
+include(":feature")
+include(":feature:landing")
+include(":feature:details")
