@@ -10,6 +10,7 @@ object PostDetailsContract {
         val id: Int = 0,
         val error: String = "",
         val isSuccess: Boolean = false,
+        val editEnabled: Boolean = false,
         val isPostUpdateSuccess: Boolean = false,
     )
 
@@ -17,5 +18,6 @@ object PostDetailsContract {
     sealed class UserEvent {
         data class OnUpdatePost(val postRequest: Post) : UserEvent()
         object OnDeletePost : UserEvent()
+        object OnEditClicked : UserEvent()
     }
 }

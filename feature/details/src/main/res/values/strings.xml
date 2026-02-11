@@ -10,4 +10,5 @@
     <string name="add_new_post">Add new post</string>
     <string name="post_details">Post Details</string>
     <string name="title_core">core</string>
+    <string name="edit">Edit</string>
 </resources>

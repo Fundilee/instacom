@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,6 +31,7 @@ fun PostDetailScreen(
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -38,6 +39,16 @@ fun PostDetailScreen(
                     Text(
                         text = stringResource(R.string.post_details)
                     )
+                },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.setEvent(PostDetailsContract.UserEvent.OnEditClicked)
+                    }) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit"
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
@@ -78,6 +89,7 @@ fun PostDetailScreen(
                 else ->
 
                     PostView(
+                        editEnabled = state.editEnabled,
                         isDetails = true,
                         title = state.post?.title.orEmpty(),
                         body = state.post?.body.orEmpty(),

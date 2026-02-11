@@ -27,5 +27,6 @@ object PostLandingContract {
         data class OnSearchPost(val query: String) : UserEvent()
         data class OnAddPost(val postRequest: Post) : UserEvent()
         object OnAddPostClicked : UserEvent()
+        object OnClear : UserEvent()
     }
 }

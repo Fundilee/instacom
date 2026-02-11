@@ -27,6 +27,7 @@ import kotlin.random.Random
 
 @Composable
 fun PostView(
+    editEnabled: Boolean = true,
     viewHeader: String = "",
     title: String = "",
     body: String = "",
@@ -56,6 +57,7 @@ fun PostView(
         )
 
         OutlinedTextField(
+            enabled = editEnabled,
             value = title,
             onValueChange = {
                 title = it
@@ -68,6 +70,7 @@ fun PostView(
         )
 
         OutlinedTextField(
+            enabled = editEnabled,
             value = body,
             onValueChange = {
                 body = it
@@ -84,6 +87,7 @@ fun PostView(
                 .fillMaxWidth()
         ) {
             Button(
+                enabled = editEnabled,
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 2.dp),

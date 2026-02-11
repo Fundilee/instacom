@@ -45,7 +45,7 @@ fun PostListScreen(
     if (state.shouldDisplayBottomSheet) {
         BottomSheetView(
             onDismiss = {
-
+                viewModel.setEvent(PostLandingContract.UserEvent.OnClear)
             },
             onConfirm = { post ->
                 viewModel.setEvent(PostLandingContract.UserEvent.OnAddPost(post))
@@ -115,7 +115,9 @@ fun PostListScreen(
                         if (state.displayPost.isEmpty()) {
                             Text(
                                 text = stringResource(R.string.no_post_found),
-                                modifier = Modifier.Companion.align(Alignment.CenterHorizontally),
+                                modifier = Modifier.Companion
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(16.dp),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         } else {
