@@ -1,4 +1,5 @@
-CRUD App with Reactive Repository
+**CRUD Application**
+
 Overview
 
 This app demonstrates a reactive CRUD architecture using Kotlin, Jetpack Compose, and a Mock API.
@@ -44,4 +45,15 @@ Libraries and Frameworks Used
 - Retrofit – Networking
 - Koin – Dependency injection
 - MockAPI – RESTful backend for prototyping
+
+Setup & Run Instructions
+
+- Clone the repository
+- Open in Android Studio
+- Ensure Kotlin and Compose versions are compatible with your project.
+- Sync Gradle.
+- Run the App
+- Click Run in Android Studio
+
+The app will fetch posts from MockAPI and allow CRUD operations.
 
